@@ -1,18 +1,16 @@
-# Regex Tutorial 
+# Regex Tutorial
 
-In this tutorial, we will be taking a brief look into what Regex (regular expressions) are and how they work. While regular expressions may seem to be overwhelming at first glance,
-just like with any language, they can be broken down into its most simple parts and easily understood.
+As a web development student, I have developed a tutorial explaining a specifics of regex so that we can understand the search pattern the regex defines
 
 ## Summary
 
-Regex (short for regular expression) is a string of text that allows you to create search patterns that match, manage, and locate text. An example code snippet of regex shows as following:
-```
-/[\w._%+-]+@[\w.-]+\.[a-zA-z]{2,4}/
-```
-* A regular expression used to match an e-mail address
+A Regex or regular expression is a sequence of characters that define a search pattern. Usually such patterns are used by string-searching algorithms for "find" or "find and replace" operations on strings. It also looks for input validations. It is a technique commonly developed in theoretical computer science.
 
-Regular expressions can also be used from the command line and within text-editors to find text within a file. 
+We will look a a string of code using regex, this code looks for a match HTML tag.
 
+Example: `/^<([a-z]+)([^<]+)*(?:>(.*)<\/\1>|\s+\/>)$/`
+
+The below content will explain what each section of this code does and more.
 
 ## Table of Contents
 
@@ -31,179 +29,121 @@ Regular expressions can also be used from the command line and within text-edito
 ## Regex Components
 
 ### Anchors
-Anchors are characters within the regular expression that allow the user to match strings that begin with or ends with (or both) certain characters. 
 
-Examples of Anchors are as follows:
+* `^abc$`	-^start / $end of the string
+    * `^` Matches the beginning of the string, or the beginning of a line if the multiline flag (m) is enabled.This matches a position, not a character.
+    * `$` Matches the end of the string, or the end of a line if the multiline flag (m) is enabled. This matches a position, not a character.
 
-* `^` - matches any string that start with the anterior word
-* `$` - matches a string that end with preceeding word before the character
-* Examples:
-```
-^Hello          matches any string starting with `Hello`
-World$          matches any string ending with `World`
-^Hello World$   matches exact string
-goodbye         matches any string that has the exact text `goodbye` in it
-```
+* `\b\B`	-word, not-word boundary
+    * `\b` Matches a word boundary position between a word character and non-word character or position (start / end of string). See the word character class (w) for more info.
+    * `\B` Matches any position that is not a word boundary. This matches a position, not a character.
+    * See Boundaries for more detailed Information
 
 ### Quantifiers
-Qunatifiers are characters within the regular expression that specify how many instances a character, group, or character class must be represented in the input to be matched.
 
-Examples of Quanitifers are as follows:
+Quantifiers indicate that the preceding token must be matched a certain number of times. A quantifire can be greedy or lazy that is explained below.
 
-* `*` - matches a string that has the anterior followed by zero or more of the last character
-* `+` - matches a string that has the anterior followed by one or more of the last character
-* `?` - matches a string that has the atnerior follwoed by zero or one of the last character
-* `{}` -  matches a string that has the anterior followed by how ever many the number in the brackets of the last character in the string
-* `()*` - matches a string that has any anterior characters followed by zero or more copies of the string within the brackets
-* Examples:
-```
-xyz*        matches a string that has xy followed by zero or more z
-xyz+        matches a string that has xy followed by one or more z
-xyz?        matches a string that has xy followed by zero or one z
-xyz{2}      matches a string that has xy followed by 2 z
-xyz{2,}     matches a string that has xy followed by 2 or more z
-xyz{2,5}    matches a string that has xy followed by 2 up to 5 z
-x(yz)*      matches a string that has x followed by zero or more copies of the sequence yz
-x(yz){2,5}  matches a string that has x followed by 2 up to 5 copies of the sequence yz
-```
+* `a*a+a?`	-0 or more, 1 or more, 0 or 1
+    * "+" Matches 1 or more of the preceding token.
+    * "*" Matches 0 or more of the preceding token.
+    * "?" Matches 0 or 1 of the preceding token, effectively making it optional.
+    * "?" Makes the preceding quantifier lazy, causing it to match as few characters as possible. By default, quantifiers are greedy, and will match as many characters as possible.
+
+* `a{5}a{2,}`	 -Looks for exactly five, two or more
+* `{2,6}`  	    -forces the input of characters between two & six characters long.
+* `a+?a{2,}?`	 -match as few as possible
+* `ab|cd`	    -match ab or cd
 
 ### OR Operator
-OR Operators (Alternation Operator) matches on of a choice of regular expressions: if you put the character(s) representing the alternation operator between any two characters in the regular expression, the result matches the union of the strings that those two characters match.
 
-Examples of OR Operators are as follows:
-
-* `(|)` - matches a string that has any anterior characters followed by the characters on the left or right of the vertical bar
-* `[]` - matches a string that has any anterior characters without any characters within the brackets
-* Examples: 
-```
-x(y|z)  matches a string that has x followed by y or z (and captures y or z)
-x[yz]   matches a string that has x, but without capturing b or c
-```
+* `|` Acts like a boolean OR. Matches the expression before or after the |.
+It can operate within a group, or on a whole expression. The patterns will be tested in order. Just as in java will match either set of characters. It will look for this OR that.
 
 ### Character Classes
-Character Classes (Character Set) tells the regex engine to match only one out serveral specific characters, such as digits, words, or whitespace
 
-Examples of Character Classes are as follows:
+Character classes match a character from a specific set. There are a number of predefined character classes and you can also define your own sets.
 
-* `\d` - matches a single character that is a digit
-* `\w` - matches a word character (any alphanumeric character plus underscore)
-* `\s` - matches a whitespace character (including tabs and line brakes)
-* `.` - matches any character
-* the capital case for any aformentioned characters will inverse the match
-* Examples:
-```
-\d    matches a single any digit 0-9
-\w    matches a single any character that is a-z
-\s    matches ` `
-.     matches any character
-\D    matches a single non-digit character
-\W    matches a single any non-character that is a-z
-\S    matches a single non-` `
-```
+* `[ABC]` Characters inside brakets will match any character in the set.
+* `[^ABC]` Adding a caret will match any character that is not in the set.
+* `[A-Z]` Add a dash between two characters will select a Range.
+* `.` Will Match any characters expect linebreaks. Its like a wildcard and will accpet any input.
+* `[\s\S]` A character set that can be used to match any character, including line breaks, without the dotall flag. An alternative is [^] carrot in brackets, but it is not supported in all browsers.
+* `\w` Matches any word character (alphanumeric & underscore). Only matches low-ascii characters (no accented or non-roman characters).
+* `\W` Matches any character that is not a word character (alphanumeric & underscore).
+* `\d` Matches any digit character (0-9)
+* `\p` Matches a character in the specified unicode category.
 
 ### Flags
-Flags are optional parameters that we can add to a plain expression to make it search in a different way. Each flag is denoted by a single alphabetic character, and serves different purposes in modifying the expression's searching behavior.
 
-Examples of Flags are as follows:
-* `g` - Global, does not return after the first match, which restarted any subsequest searches from the end of the previous match (Makes the expression search for all occurences)
-* `m` - Multi-line, when enabled the Anchors (^ $) will match the start and end of a line, rather than the whole string
-* `i` - Insensitive, makes the entire expression case-insensitive
-* Examples:
-```
-/Hello/g   matches all `Hello` in the test
-/Hello/m   matches the beginning and ending of each line with `Hello`, rather than the whole string `Hello` itself
-/Hello/i   matches all `hello` despite case (Hello, hEllo, heLlo, hellO, hello, HELLO all match)
-```
+Expression flags change how the expression is interpreted. Flags follow the closing forward slash of the expression.
+
+* `i` Ignores case
+* `g` Global search retain the index of the last match, allowing subsequent searches to start from the end of the previous match. Without the global flag, subsequent searches will return the same match.
+* `m` Multiline flag When the multiline flag is enabled, beginning and end anchors (^ and $) will match the start and end of a line, instead of the start and end of the whole string.
+* `u` Unicode
+* `y` The expression will only match from its lastIndex position and ignores the global (g) flag if set. Because each search in RegExr is discrete, this flag has no further impact on the displayed results.
+* `s` Dot (.) will match any character, including newline.
+
+
+NOTE: Unicode is an information technology standard for the consistent encoding, representation, and handling of text expressed in most of the world's writing systems
 
 ### Grouping and Capturing
-Grouping unifies a pattern or string so that it is matched in a complete block
-
-Examples of Grouping are as follows:
-* `()` - parentheses creates a capture group
-* `(?:)` - using `?:` disables the capturing group
-* `(?<>)` - using `?<>` puts a name to the group
-* Examples:
-```
-x(yz)           parentheses create a capturing group with value yz
-x(?:yz)*        using ?: we disable the capturing group
-x(?<bar>yz)     using ?<bar> we put a name to the group
-```
+* `(ABC)` Capturing groups multiple tokens together and creates a capture group for extracting a substring or using a backreference.
+* `(?<name>ABC)` named capturing group captures groups of a specific name.
+* `\1` is a numeric Referance
+* `(?:ABC)` Groups multiple tokens together without creating a capture group.
 
 ### Bracket Expressions
-Bracket Expressions are characters enclosed by a bracket `[]` matching any single character within the brackets. 
-*note: if the first character within the brackets is a `^` then it signifies any chracter **not** in the list, and is unspecified whether it matches an encoding error. 
 
-Examples of Bracket Expressions are as follows: 
-* `[]` - matching any single character within the brackets
-* `[]%` - matching the string inside the brackets before the `%`
-* `[^]` - matching any string that has not a letter from within the brackets (negation of expression)
-* Examples:
-```
-[xyz]         matches a string that etiher has x or x y or x z (same as x|y|z)
-[x-y]         similar to case above
-[u-zU-Z0-9]   a string that represents a single hexadecimal digit, case insensitively
-[0-9]%        a string that has a character from 0-9 before a %
-[^a-zA-Z]     a string that has not a letter from a to z or from A to Z
-```
+A bracket expression enclosed in square brackets is a regular expression that matches a single character, or collating element. If the initial character is a circumflex ^, then this bracket expression is complemented.
+
+See Character Class to see some examples.
 
 ### Greedy and Lazy Match
-Greedy and/or Lazy Matching are quantifies that expand the match as far as possible through the text. 
 
-Examples of Greedy and/or Lazy Matching are as follows:
-* `* + {}` - any one of these character can be used as a quanitifer for a Greedy or Lazy Match
-* Examples:
-```
-<.+?>     matches any character that is one or more times included inside `<` and `>`, and expands as needed.
-<[^<>]+>  matches any character expects `<` or `>` one or more times included inside `<` and `>`. 
-```
+* 'Greedy' means matching the longest possible string.
+    A Greedy quantifier tells the engine to match as many instances of its quantified token or subpattern as possible. This behavior is called greedy.
+
+* 'Lazy' means matching the shortest possible string.
+    A lazy quantifier tells the engine to match as few of the quantified tokens as needed. As you'll see in the table below, a regular quantifier is made lazy by appending a ? question mark to it.
+
+See [link]"https://javascript.info/regexp-greedy-and-lazy for more detailed information.
 
 ### Boundaries
-Not to be confused with actual characters, simply put, Boundaries are the places between characters. A Boundary should be thought of as a wall between any adjacent characters.
-There are two types of Boundaries, **Word** and ***Non-Word**, each denoted by a specific character. 
 
-Examples of Boundaries are as follows:
-* `\b` - A position that bounds a word, or where a word starts or ends. It denotes a place between a word and non-word character, at the start and end of a string.
-* `\B` - Exact opposite of a word boundary, the negation of `\b` and will match **any position a word boundary doesnt.** *
-* `*`Will match between a word and word character, as well as between a non-word and non-word character.
-* Examples of Boundaries are as follows:
-```
-`Hello World` has 12 total Boundaries with 8 Word Boundaries as seen below:
-|H|e|l|l|o| |W|o|r|l|d|
-^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^ ^
-N W W W W N N W W W W N  -  N = Nonword Boundary \ W = Word Boundary
-\bxyz\b     matches a "whole words only search" for the string `xyz`
-\Bxyz\B     matches only if the pattern is fully surrounded by word characters `txyzt` would match the string `xyz` because it only has word boundaries
-```
+The `\b` is an anchor like the caret and the dollar sign. It matches at a position that is called a “word boundary”. This match is zero-length.
+
+Characters that are matched by the short-hand character class `\w` are the characters that are treated as word characters by word boundaries.
+
+Since digits are considered to be word characters, `\b4\b` can be used to match a 4 that is not part of a larger number. So saying `\b` matches before and after an alphanumeric sequence is more exact than saying “before and after a word”.
+
+`\B` is the negated version of `\b`. `\B` matches at every position where `\b` does not. Effectively, `\B` matches at any position between two word characters as well as at any position between two non-word characters.
+
+There are more boundries with the Regex Engine. Some examples include Tcl, GNU, and POSIX.
 
 ### Back-references
-When using Grouping (look above) you may Capture the Group, which is saved in memory for later use. Backreferencing is the name given to the action of using these matches. 
-Backreferencing is the refernce of a captured match, save in memory, by a captured group.
 
-Examples are a follows:
-```
-([xyz])\1              using \1 it matches the same text that was matched by the first capturing group
-([uwx])([yz])\2\1      we can use \2 (\3, \4, etc.) to identify the same text that was matched by the second (third, fourth, etc.) capturing group
-(?<bar>[xzy])\k<bar>   we put the name bar to the group and we reference it later (\k<foo>). The result is the same of the first regex
-```
+Backreferences match the same text as previously matched by a capturing group. Suppose you want to match a pair of opening and closing HTML tags, and the text in between. By putting the opening tag into a backreference, we can reuse the name of the tag for the closing tag.
+
+For Example: `<([A-Z][0-9]*)\b[^>]*>.*?</\1>` This regex contains only one pair of parentheses, which capture the string matched by `[A-Z][0-9]*`. This is the opening HTML tag. The backreference `\1` references the first capturing group. `\1` matches the exact same text that was matched by the first capturing group. The `/` before it is a literal character. It is simply the forward slash in the closing HTML tag that we are trying to match.
+
 ### Look-ahead and Look-behind
-Look-ahead and Look-behind (lookaround) are `start and end` zero-length assertions [Anchors](#anchors) but they actually match characters, then ends the match, returning only the result: **Match or No Match**. They do not cosume characters in the string, but only assert wether a match is possible or not. Lookaround allows you to create regular expressions that are impossible to create without them, or that would get very longwinded without them.
 
-Examples of Look-ahead and Look-behind are as follows:
-```
-h(?=t)       matches a h only if is followed by t, but t will not be part of the match
-(?<=t)h      matches a h only if is preceded by an t, but t will not be part of the match
+* `(?=ABC)` is a postive lookahead and it matches a group after the main expression without including it in the result.
+* `(?!ABC)` is a negitive lookahead and it specifies a group that can not match after the main expression (if it matches, the result is discarded)
 
-NEGATION OPERATOR
+* `(?<=ABC>)` is a postive lookbehind and matches a group before the main expression without including it in the result.
+* `(?<!ABC)` is a negitive lookbehind and Specifies a group that can not match before the main expression (if it matches, the result is discarded).
 
-h(?!t)       matches a h only if is not followed by t, but t will not be part of the match
-(?<!t)h      matches a h only if is not preceded by an t, but t will not be part of the match
-
-```
+Lookaheads and lookbehinds forces the main expressions to be what you have defined it as. Without it being exactly what it is it will not be accepted as a valid input.
 
 ## Author
 
-Nicholas Kosik is a Junior Developer towards the end of his coding bootcamp through UT at Austin
+Hoa Pham: UT Austin coding student
 
-Feel free to check out his GitHub repo for all of his previous projects
+### Sources and References
+    * [regexr](https://regexr.com/)
+    * [BackRef](https://www.regular-expressions.info/backref.html)
+    * [RegExpression](https://www.regular-expressions.info/wordboundaries.html)
 
-[GitHub Profile](https://github.com/hoapham96)
+My Github [github] https://github.com/hoapham96
